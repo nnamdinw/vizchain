@@ -47,8 +47,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"strconv"
-	"time"
 	"strings"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
@@ -109,7 +107,7 @@ func (t *SimpleChaincode) createAccount(stub shim.ChaincodeStubInterface, args [
 
 			if strings.Contains(err.Error(), "unexpected end") {
 				fmt.Println("No data means existing account found for " + account.ID + ", initializing account.")
-				err = stub.PutState(accountPrefix + account.ID, accountBytes)
+				err = stub.PutState(account.ID, accountBytes)
 
 				if err == nil {
 					fmt.Println("created account" + account.ID)
@@ -329,7 +327,7 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 	}
 }
 
-func getAllFootage(stub shim.ChaincodeStubInterface) ([]CP, error) {
+func getAllFootage(stub shim.ChaincodeStubInterface) ([]footage, error) {
 
 	var allFootage []footage
 
@@ -364,22 +362,22 @@ func getAllFootage(stub shim.ChaincodeStubInterface) ([]CP, error) {
 	return allFootage, nil
 }
 
-func getFootage(cpid string, stub shim.ChaincodeStubInterface) (CP, error) {
+func getFootage(cpid string, stub shim.ChaincodeStubInterface) (footage, error) {
 	var feet footage //here feet is a single footage object
 
 	cpBytes, err := stub.GetState(cpid) //here 'cpid' refers to vID field of footage
 	if err != nil {
 		fmt.Println("Error retrieving footage " + cpid)
-		return cp, errors.New("Error retrieving footage " + cpid)
+		return footage, errors.New("Error retrieving footage " + cpid)
 	}
 
 	err = json.Unmarshal(cpBytes, &feet)
 	if err != nil {
 		fmt.Println("Error unmarshalling footage " + cpid)
-		return cp, errors.New("Error unmarshalling cp " + cpid)
+		return footage, errors.New("Error unmarshalling cp " + cpid)
 	}
 
-	return cp, nil
+	return footage, nil
 }
 
 func getAccount(companyID string, stub shim.ChaincodeStubInterface) (Account, error) {
