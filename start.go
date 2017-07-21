@@ -144,12 +144,12 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 	fmt.Println("Init firing. Function will be ignored: " + function)
 
 	// Initialize the collection of commercial paper keys
-	fmt.Println("Initializing paper keys collection")
+	fmt.Println("Initializing footage keys collection")
 	var blank []string
 	blankBytes, _ := json.Marshal(&blank)
 	err := stub.PutState("FootageKeys", blankBytes)
 	if err != nil {
-		fmt.Println("Failed to initialize paper key collection")
+		fmt.Println("Failed to initialize footage key collection")
 	}
 
 	fmt.Println("Initialization complete")
@@ -157,7 +157,7 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 }
 
 func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	fmt.Println("Creating commercial paper")
+	fmt.Println("Creating footage")
 
 	/*		0
 		json
@@ -244,7 +244,7 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 		err = stub.PutState( newfootage.Owner.ID, accountBytesToWrite)
 		if err != nil {
 			fmt.Println("Error putting state on accountBytesToWrite")
-			return nil, errors.New("Error issuing commercial paper")
+			return nil, errors.New("Error issuing footage")
 		}
 
 
@@ -262,7 +262,7 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 			return nil, errors.New("Error unmarshalling Footage keys ")
 		}
 
-		fmt.Println("Appending the new key to Paper Keys")
+		fmt.Println("Appending the new key to footage Keys")
 		foundKey := false
 		for _, key := range keys {
 			if key == newfootage.vID {
@@ -285,7 +285,7 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 			}
 		}
 
-		fmt.Println("Create footage paper %+v\n", newfootage)
+		fmt.Println("Create footage  %+v\n", newfootage)
 		return nil, nil
 	} else {
 		fmt.Println("Footage exists, appending frames!")
@@ -467,6 +467,8 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 		return t.createNewFootage(stub, args) //we use this to create brand new footage and add to existing footage
 	} else if function == "createAccount" {
 		return t.createAccount(stub, args)
+	}else if function == "init" {
+		return t.Init(stub,"initializer",args)
 	}
 
 	return nil, errors.New("Received unknown function invocation: " + function)
