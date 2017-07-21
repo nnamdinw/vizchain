@@ -48,7 +48,6 @@ import (
 	"errors"
 	"fmt"
 	"strings"
-
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
@@ -464,7 +463,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	fmt.Println("Invoke running. Function: " + function)
 
-	if function == "craeteNewFootage" {
+	if function == "createNewFootage" {
 		return t.createNewFootage(stub, args) //we use this to create brand new footage and add to existing footage
 	} else if function == "createAccount" {
 		return t.createAccount(stub, args)
