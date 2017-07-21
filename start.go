@@ -205,7 +205,7 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 		fmt.Println("error invalid footage issue")
 		return nil, errors.New("Invalid footage issue")
 	}
-	newfootage.Owner = account.ID
+	newfootage.Owner = account
 	newfootage.vID = args[1]
 	account.AssetsIds = append(account.AssetsIds, newfootage.vID)
 
@@ -230,7 +230,7 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 			fmt.Println("Error marshalling foortage")
 			return nil, errors.New("Error issuing footage")
 		}
-		err = stub.PutState(newfootage.Frames, cpBytes)
+		err = stub.PutState(newfootage.vID, cpBytes)
 		if err != nil {
 			fmt.Println("Error issuing footage")
 			return nil, errors.New("Error issuing footage")
@@ -242,7 +242,7 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 			fmt.Println("Error marshalling account")
 			return nil, errors.New("Error issuing footage")
 		}
-		err = stub.PutState( newfootage.Owner, accountBytesToWrite)
+		err = stub.PutState( newfootage.Owner.ID, accountBytesToWrite)
 		if err != nil {
 			fmt.Println("Error putting state on accountBytesToWrite")
 			return nil, errors.New("Error issuing commercial paper")
@@ -368,7 +368,7 @@ func getFootage(cpid string, stub shim.ChaincodeStubInterface) (footage, error) 
 	cpBytes, err := stub.GetState(cpid) //here 'cpid' refers to vID field of footage
 	if err != nil {
 		fmt.Println("Error retrieving footage " + cpid)
-		return footage, errors.New("Error retrieving footage " + cpid)
+		return feet, errors.New("Error retrieving footage " + cpid)
 	}
 
 	err = json.Unmarshal(cpBytes, &feet)
@@ -385,16 +385,16 @@ func getAccount(companyID string, stub shim.ChaincodeStubInterface) (Account, er
 	companyBytes, err := stub.GetState(companyID)
 	if err != nil {
 		fmt.Println("Account not found " + companyID)
-		return company, errors.New("Account not found " + companyID)
+		return shooter, errors.New("Account not found " + companyID)
 	}
 
-	err = json.Unmarshal(companyBytes, &company)
+	err = json.Unmarshal(companyBytes, &shooter)
 	if err != nil {
 		fmt.Println("Error unmarshalling account " + companyID + "\n err:" + err.Error())
-		return company, errors.New("Error unmarshalling account " + companyID)
+		return shooter, errors.New("Error unmarshalling account " + companyID)
 	}
 
-	return company, nil
+	return shooter, nil
 }
 
 
