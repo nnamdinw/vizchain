@@ -154,7 +154,7 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 	}
 
 	fmt.Println("Initialization complete")
-	return "GoAway", nil
+	return nil, nil
 }
 
 func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
