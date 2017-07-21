@@ -107,7 +107,7 @@ func (t *SimpleChaincode) createAccount(stub shim.ChaincodeStubInterface, args [
 			fmt.Println("Error unmarshalling account " + account.ID + "\n--->: " + err.Error())
 
 			if strings.Contains(err.Error(), "unexpected end") {
-				fmt.Println("No data means existing account found for " + account.ID + ", initializing account.")
+				fmt.Println("No data means no existing account found for " + account.ID + ", initializing account.")
 				err = stub.PutState(account.ID, accountBytes)
 
 				if err == nil {
@@ -195,7 +195,7 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 
 	*/
 	//need minimum two arg , two arg means creating empty footage, 4 arg means appending frame to existing footage.. 
-	if len(args) != 3 {
+	if len(args) != 2 {
 		fmt.Println("error invalid arguments")
 		return nil, errors.New("Incorrect number of arguments. Expecting [Account,Footage,VideoFrame]") //if adding new frames to existing footage, pass me existing ID - else - ill handle a brand new vID
 	}
@@ -222,14 +222,22 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 		return nil, errors.New("Invalid footage issue")
 	}
 
+/*
 	fmt.Println("Unmarshalling video frame third")
 	err = json.Unmarshal([]byte(args[2]), &videoframe)
 	if err != nil {
 		fmt.Println("error unmarshalling video frame.")
 		return nil, errors.New("Invalid footage issue")
 	}
+*/
 
 
+	videoframe = newfootage.Frames[0]
+
+	if(videoframe == nil){
+		fmt.Println("Error making newframe object")
+		return nil, errors.New("Invalid footage issue")
+	}
 	//var vframe = video_frame{Hash: currentHash,Timecode:currentTimecode}
 	// = footage{vID: newfootage.vID, Owner: newfootage.Owner, Frames: assetIds}
 	//accountBytes, err := json.Marshal(&account)
