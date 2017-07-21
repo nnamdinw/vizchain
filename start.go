@@ -214,20 +214,6 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 		return nil, errors.New("Invalid footage issue")
 	}
 
-	if(len(args[2]) > 0){
-		currentHash := args[2]
-	}else{
-		currentHash := ""
-	}
-
-	if(len(args[3]) > 0){
-		currentTimecode:= args[3]
-	}else{ 
-		currentTimecode:= ""
-	}
-
-
-
 
 	fmt.Println("Unmarshalling Footage second")
 	err = json.Unmarshal([]byte(args[1]), &newfootage)
@@ -246,7 +232,7 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 
 	//var vframe = video_frame{Hash: currentHash,Timecode:currentTimecode}
 	// = footage{vID: newfootage.vID, Owner: newfootage.Owner, Frames: assetIds}
-	accountBytes, err := json.Marshal(&account)
+	//accountBytes, err := json.Marshal(&account)
 
 
 	newfootage.Owner = account
