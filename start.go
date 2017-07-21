@@ -374,10 +374,10 @@ func getFootage(cpid string, stub shim.ChaincodeStubInterface) (footage, error) 
 	err = json.Unmarshal(cpBytes, &feet)
 	if err != nil {
 		fmt.Println("Error unmarshalling footage " + cpid)
-		return footage, errors.New("Error unmarshalling cp " + cpid)
+		return feet, errors.New("Error unmarshalling cp " + cpid)
 	}
 
-	return footage, nil
+	return feet, nil
 }
 
 func getAccount(companyID string, stub shim.ChaincodeStubInterface) (Account, error) {
