@@ -213,8 +213,7 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 
 	var videoframe video_frame
 
-	if(len(args) == 4)
-	{
+	if(len(args) == 4){
 		videoframe.Hash = args[2]
 		videoframe.Timecode = args[3]
 	} else {
@@ -309,8 +308,9 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 			}	
 		}
 */
-		if(argCheck == false)
+		if(argCheck == false){
 			return nil, errors.New("Error, Footage ID exists but no new frame data provided")
+		}
 
 		cprx.Frames = append(cprx.Frames,videoframe)
 		cpWriteBytes, err := json.Marshal(&cprx)
