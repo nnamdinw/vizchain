@@ -154,7 +154,7 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 	}
 
 	fmt.Println("Initialization complete")
-	return nil, nil
+	return "GoAway", nil
 }
 
 func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
@@ -251,7 +251,7 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 
 		// Update the paper keys by adding the new key
 		fmt.Println("Getting Footage Keys")
-		keysBytes, err := stub.GetState("PaperKeys") //get existing account's footage
+		keysBytes, err := stub.GetState("footageKeys") //get existing account's footage
 		if err != nil {
 			fmt.Println("Error retrieving footage keys")
 			return nil, errors.New("Error retrieving footage keys")
@@ -262,7 +262,7 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 			fmt.Println("Error unmarshel keys")
 			return nil, errors.New("Error unmarshalling Footage keys ")
 		}
-/*
+
 		fmt.Println("Appending the new key to Paper Keys")
 		foundKey := false
 		for _, key := range keys {
@@ -279,13 +279,13 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 				return nil, errors.New("Error marshalling the keys")
 			}
 			fmt.Println("Put state on Footage Keys")
-			err = stub.PutState("PaperKeys", keysBytesToWrite)
+			err = stub.PutState("footageKeys", keysBytesToWrite)
 			if err != nil {
 				fmt.Println("Error writting keys back")
 				return nil, errors.New("Error writing the keys back")
 			}
 		}
-*/
+
 		fmt.Println("Create footage paper %+v\n", newfootage)
 		return nil, nil
 	} else {
@@ -332,7 +332,7 @@ func getAllFootage(stub shim.ChaincodeStubInterface) ([]footage, error) {
 	var allFootage []footage
 
 	// Get list of all the keys
-	keysBytes, err := stub.GetState("PaperKeys") //get keys of this account's footages
+	keysBytes, err := stub.GetState("footageKeys") //get keys of this account's footages
 	if err != nil {
 		fmt.Println("Error retrieving footage keys")
 		return nil, errors.New("Error retrieving footages")
