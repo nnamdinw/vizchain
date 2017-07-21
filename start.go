@@ -199,7 +199,7 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 	var account Account
 	var argCheck = false
 	fmt.Println("Unmarshalling Footage")
-	err = json.Unmarshal([]byte(args[0]), &account)
+	err = json.Unmarshal([]byte(args[0]), &account.ID)
 	if err != nil {
 		fmt.Println("error invalid footage issue")
 		return nil, errors.New("Invalid footage issue")
