@@ -187,6 +187,12 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 			"issueDate":"1456161763790"  (current time in milliseconds as a string)
 
 		}
+
+
+
+
+
+
 	*/
 	//need minimum two arg , two arg means creating empty footage, 4 arg means appending frame to existing footage.. 
 	if len(args) != 3 {
@@ -200,7 +206,7 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 
 	var account Account
 	var newfootage footage
-	var vframe video_frame
+	var videoframe video_frame
 	fmt.Println("Unmarshalling Account first")
 	err = json.Unmarshal([]byte(args[0]), &account)
 	if err != nil {
