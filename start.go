@@ -24,6 +24,8 @@ Licensed Materials - Property of IBM
 
 Hierarchy :
 	AccountHolder
+		ID
+		Name
 		AssetID[](footage::vID)
 
 	Footage
@@ -187,9 +189,9 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 		}
 	*/
 	//need minimum two arg , two arg means creating empty footage, 4 arg means appending frame to existing footage.. 
-	if len(args) != 2 {
+	if len(args) < 2 {
 		fmt.Println("error invalid arguments")
-		return nil, errors.New("Incorrect number of arguments. Expecting accout ID of footage creator and videoID") //if adding new frames to existing footage, pass me existing ID - else - ill handle a brand new vID
+		return nil, errors.New("Incorrect number of arguments. Expecting [AccountID,FootageID,Data,Timecode]") //if adding new frames to existing footage, pass me existing ID - else - ill handle a brand new vID
 	}
 
 
@@ -199,7 +201,7 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 	var account Account
 	var argCheck = false
 	fmt.Println("Unmarshalling Footage")
-	err = json.Unmarshal([]byte(args[0]), &account.ID)
+	err = json.Unmarshal([]byte(args[0]), &account)
 	if err != nil {
 		fmt.Println("error invalid footage issue")
 		return nil, errors.New("Invalid footage issue")
@@ -220,7 +222,7 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 	}
 	newfootage.Frames = append(newfootage.Frames, videoframe)
 
-	fmt.Println("Getting State on footage " + newfootage.vID)
+	fmt.Println("Getting State on footage " + newfootage.vID) //do i need to make it something like userID+vID to specify a specific footageID
 	cpRxBytes, err := stub.GetState(newfootage.vID)
 	if cpRxBytes == nil {
 		fmt.Println("vID does not exist, creating it") //new footage
