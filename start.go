@@ -189,37 +189,63 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 		}
 	*/
 	//need minimum two arg , two arg means creating empty footage, 4 arg means appending frame to existing footage.. 
-	if len(args) < 2 {
+	if len(args) != 3 {
 		fmt.Println("error invalid arguments")
-		return nil, errors.New("Incorrect number of arguments. Expecting [AccountID,FootageID,Data,Timecode]") //if adding new frames to existing footage, pass me existing ID - else - ill handle a brand new vID
+		return nil, errors.New("Incorrect number of arguments. Expecting [Account,Footage,VideoFrame]") //if adding new frames to existing footage, pass me existing ID - else - ill handle a brand new vID
 	}
 
 
 
-	var newfootage footage
 	var err error
+
 	var account Account
-	var argCheck = false
-	fmt.Println("Unmarshalling Footage")
+	var newfootage footage
+	var vframe video_frame
+	fmt.Println("Unmarshalling Account first")
 	err = json.Unmarshal([]byte(args[0]), &account)
 	if err != nil {
-		fmt.Println("error invalid footage issue")
+		fmt.Println("error unmarshalling account.")
 		return nil, errors.New("Invalid footage issue")
 	}
+
+	if(len(args[2]) > 0){
+		currentHash := args[2]
+	}else{
+		currentHash := ""
+	}
+
+	if(len(args[3]) > 0){
+		currentTimecode:= args[3]
+	}else{ 
+		currentTimecode:= ""
+	}
+
+
+
+
+	fmt.Println("Unmarshalling Footage second")
+	err = json.Unmarshal([]byte(args[1]), &newfootage)
+	if err != nil {
+		fmt.Println("error unmarshalling account.")
+		return nil, errors.New("Invalid footage issue")
+	}
+
+	fmt.Println("Unmarshalling video frame third")
+	err = json.Unmarshal([]byte(args[2]), &videoframe)
+	if err != nil {
+		fmt.Println("error unmarshalling video frame.")
+		return nil, errors.New("Invalid footage issue")
+	}
+
+
+	//var vframe = video_frame{Hash: currentHash,Timecode:currentTimecode}
+	// = footage{vID: newfootage.vID, Owner: newfootage.Owner, Frames: assetIds}
+	accountBytes, err := json.Marshal(&account)
+
+
 	newfootage.Owner = account
-	newfootage.vID = args[1]
 	account.AssetsIds = append(account.AssetsIds, newfootage.vID)
 
-	var videoframe video_frame
-
-	if(len(args) == 4){
-		videoframe.Hash = args[2]
-		videoframe.Timecode = args[3]
-	} else {
-		videoframe.Hash = ""
-		videoframe.Timecode = ""
-		argCheck = true
-	}
 	newfootage.Frames = append(newfootage.Frames, videoframe)
 
 	fmt.Println("Getting State on footage " + newfootage.vID) //do i need to make it something like userID+vID to specify a specific footageID
@@ -328,7 +354,7 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 	}
 }
 
-func getAllFootage(stub shim.ChaincodeStubInterface) ([]footage, error) {
+func getAllFootage(args[] string,stub shim.ChaincodeStubInterface) ([]footage, error) {
 
 	var allFootage []footage
 
@@ -405,7 +431,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 
 	if function == "GetAllFootage" {
 		fmt.Println("Getting all Footages")
-		allCPs, err := getAllFootage(stub)
+		allCPs, err := getAllFootage(args,stub)
 		if err != nil {
 			fmt.Println("Error from getAllFootage")
 			return nil, err
