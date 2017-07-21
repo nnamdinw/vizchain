@@ -234,10 +234,6 @@ func (t *SimpleChaincode) createNewFootage(stub shim.ChaincodeStubInterface, arg
 
 	videoframe = newfootage.Frames[0]
 
-	if(videoframe == nil){
-		fmt.Println("Error making newframe object")
-		return nil, errors.New("Invalid footage issue")
-	}
 	//var vframe = video_frame{Hash: currentHash,Timecode:currentTimecode}
 	// = footage{vID: newfootage.vID, Owner: newfootage.Owner, Frames: assetIds}
 	//accountBytes, err := json.Marshal(&account)
